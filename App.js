@@ -1,22 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import Loginpage from './components/Loginpage';
-import Registerpage from './components/Registerpage';
+import React from 'react';
 
-export default function App() {
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
+import AuthStack from './navigation/AuthStack';;
+
+
+function App() {
   return (
-    <>
-    {/* <Loginpage/> */}
-    <Registerpage/>
-    </>
+    <NavigationContainer>
+      <AuthStack />
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   backgroundColor: '#fff',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
-});
+export default App;
