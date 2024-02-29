@@ -82,9 +82,9 @@ const Registerpage = ({navigation}) => {
             justifyContent: 'center',
             marginBottom: 30,
           }}>
-          <Text>Already have an account ?</Text>
+          <Text style={{marginBottom:12}}>Already have an account ?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={{color: '#AD40AF', fontWeight: '700'}}> Login</Text>
+            <Text style={{color: '#AD40AF', fontWeight: '700',marginBottom:12}}> Login</Text>
           </TouchableOpacity>
         </View> 
       </View>

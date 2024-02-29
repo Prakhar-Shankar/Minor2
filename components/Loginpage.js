@@ -11,7 +11,7 @@ import {
 
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import profile from "../images/profile.png"
+import profile from "../images/profile.png";
 import { AntDesign } from '@expo/vector-icons';
 
 import CustomButton from '../components/CustomButton';
