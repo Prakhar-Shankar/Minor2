@@ -102,7 +102,7 @@ export default Loginpage;
 
 const styles = StyleSheet.create({
       container: {
-        flex: 1, justifyContent: 'center',backgroundColor:'#FEDD01'
+        flex: 1, justifyContent: 'center',backgroundColor:'#F0C935'
         
       },
       login: {
