@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Dimensions } from 'react-native';
 const { width } = Dimensions.get('window');
-const imageWidth = width * 0.95; // 80% of the screen width
-const imageHeight = imageWidth; // Same as the width for a 1:1 aspect ratio
+const imageWidth = width * 0.95; 
+const imageHeight = imageWidth;
 
 
 import Onboarding from 'react-native-onboarding-swiper';
@@ -30,7 +30,7 @@ const Skip = ({...props}) => (
         style={{marginHorizontal:10}}
         {...props}
     >
-        <Text style={{fontSize:16}}>Skip</Text>
+        <Text style={{fontSize:16,color:"#0066ff"}}>Skip</Text>
     </TouchableOpacity>
 );
 

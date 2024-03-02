@@ -39,7 +39,7 @@ const Registerpage = ({navigation}) => {
         <InputField
           label={'Full Name'}
           icon={
-            <Ionicons name="person" size={20} color="black" style={{marginRight: 8}}/>
+            <Ionicons name="person" size={20} color="#464853" style={{marginRight: 8}}/>
           }
           inputType="text" 
         />
@@ -47,7 +47,7 @@ const Registerpage = ({navigation}) => {
         <InputField
           label={'Email ID'}
           icon={
-            <MaterialIcons name="email" size={20} color="black" style={{marginRight: 8}}/>
+            <MaterialIcons name="email" size={20} color="#464853" style={{marginRight: 8}}/>
           }
           keyboardType="email-address"
         />
@@ -55,21 +55,21 @@ const Registerpage = ({navigation}) => {
         <InputField 
           label={'Password'}
           icon={
-            <Entypo name="lock" size={20} color="black" style={{marginRight: 8}}/> 
+            <Entypo name="lock" size={20} color="#464853" style={{marginRight: 8}}/> 
           }
           inputType="password" 
         />
         <InputField 
           label={'Confirm Password'}
           icon={
-            <Entypo name="lock" size={20} color="black" style={{marginRight: 8}}/> 
+            <Entypo name="lock" size={20} color="#464853" style={{marginRight: 8}}/> 
           }
           inputType="password" 
         />
         <InputField 
           label={'Mobile Number'}
           icon={
-            <FontAwesome name="phone" size={20} color="black" style={{marginRight: 8}}/>
+            <FontAwesome name="phone" size={20} color="#464853" style={{marginRight: 8}}/>
           }
           inputType="number" 
         />
@@ -96,7 +96,7 @@ export default Registerpage;
 
 const styles = StyleSheet.create({
       container: {
-        flex: 1, justifyContent: 'center',backgroundColor:'#F0C935'
+        flex: 1, justifyContent: 'center',backgroundColor:'white'
         
       },
       login: {
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
         marginBottom: 30,
       },
       icon:{
-        borderColor: '#181816',
+        borderColor: '#0066ff',
         borderWidth: 2,
         borderRadius: 10,
         paddingHorizontal: 30,

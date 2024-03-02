@@ -5,6 +5,7 @@ import { auth } from '../utils/firebaseConfig';
 
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import profile from "../images/profile.png";
+import { Ionicons } from '@expo/vector-icons';
 import CustomButton from '../components/CustomButton';
 
 const Loginpage = ({ navigation }) => {
@@ -29,6 +30,8 @@ const Loginpage = ({ navigation }) => {
           <Image source={profile} height={300} width={300} />
         </View>
         <Text style={styles.login}>Login</Text>
+        <View style={styles.inputContainer}>
+          <Ionicons name="person" size={20} color="#666" style={styles.icon} />
         <TextInput
           style={styles.input}
           value={email}
@@ -37,6 +40,9 @@ const Loginpage = ({ navigation }) => {
           keyboardType="email-address"
           autoCapitalize="none"
         />
+      </View>
+      <View style={styles.inputContainer}>
+        <MaterialIcons name="email" size={20} color="#666" style={styles.icon} />
         <TextInput
           style={styles.input}
           value={password}
@@ -44,6 +50,9 @@ const Loginpage = ({ navigation }) => {
           placeholder="Password"
           secureTextEntry
         />
+      </View>
+
+        
         <CustomButton label={"Login"} onPress={createUser} />
         <Text style={styles.orText}>Or, login with ...</Text>
         {/* Add login with social media buttons */}
@@ -62,7 +71,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#F0C935',
+    backgroundColor: 'white',
   },
   contentContainer: {
     paddingHorizontal: 25,
@@ -77,27 +86,42 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#181816',
     marginBottom: 30,
-    textAlign: 'center',
+    // textAlign: 'center',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    // borderBottomColor: '#ddd',
+    paddingBottom: 8,
+    marginBottom: 25,
+  },
+  icon: {
+    marginRight: 10,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 20,
+    flexDirection: 'row',
+    borderBottomColor: '#181816',
+    // borderBottomWidth: 1,
+    // paddingBottom: 8,
+    // marginBottom: 25,
+    alignItems:'center',
   },
   orText: {
     textAlign: 'center',
+    fontSize:15,
     color: '#181816',
     marginBottom: 30,
   },
   registerContainer: {
     flexDirection: 'row',
+    fontSize:15,
     justifyContent: 'center',
     marginBottom: 30,
   },
   registerText: {
     color: '#AD40AF',
+    fontSize:15,
     fontWeight: '700',
   },
 });
