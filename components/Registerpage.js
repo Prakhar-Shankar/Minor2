@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, SafeAreaView, View, Text, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'; // Import sendEmailVerification
 import { auth } from '../utils/firebaseConfig';
 import CustomButton from '../components/CustomButton';
 import profile from "../images/profile.png";
@@ -24,11 +24,14 @@ const Registerpage = ({ navigation }) => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
+      // Send email verification
+      await sendEmailVerification(user); // Call sendEmailVerification function
+
       // Additional database operations (e.g., saving user details)
       // ...
 
       console.log('User account created:', user);
-      Alert.alert('Success', 'User account created successfully.');
+      Alert.alert('Success', 'User account created successfully. Please check your email for verification.');
       
       // Navigate to login page after successful registration
       navigation.navigate('Login');
