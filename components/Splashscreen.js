@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { Animated, Dimensions, Image, Text, View } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import Logo from '../images/taxi2.png';
+import Logo from '../images/logo.png';
 import Onboardingpage from './Onboardingpage';
 
 
@@ -137,7 +137,7 @@ export default function SplashScreen() {
                             { translateY: moveTitle.y },
                             { scale: scaleTitle }
                         ]
-                    }}>RideTogether</Animated.Text>
+                    }}>Goo Cab</Animated.Text>
 
                 </Animated.View>
 

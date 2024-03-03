@@ -3,7 +3,13 @@ import { StyleSheet, SafeAreaView, View, Text, Image, TextInput, TouchableOpacit
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'; // Import sendEmailVerification
 import { auth } from '../utils/firebaseConfig';
 import CustomButton from '../components/CustomButton';
-import profile from "../images/profile.png";
+import profile from "../images/cab3.png";
+
+import { Entypo } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 const Registerpage = ({ navigation }) => {
   const [fullName, setFullName] = useState('');
@@ -45,9 +51,11 @@ const Registerpage = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
         <View style={styles.imageContainer}>
-          <Image source={profile} height={300} width={300} />
+          <Image source={profile} style={styles.image} />
         </View>
         <Text style={styles.login}>Register</Text>
+        <View style={styles.inputContainer}>
+        <Ionicons name="person" size={20} color="#464853" style={styles.icon}/>
         <TextInput
           style={styles.input}
           value={fullName}
@@ -55,6 +63,9 @@ const Registerpage = ({ navigation }) => {
           placeholder="Full Name"
           autoCapitalize="words"
         />
+        </View>
+        <View style={styles.inputContainer}>
+        <MaterialIcons name="email" size={20} color="#464853" style={styles.icon}/>
         <TextInput
           style={styles.input}
           value={email}
@@ -63,6 +74,9 @@ const Registerpage = ({ navigation }) => {
           keyboardType="email-address"
           autoCapitalize="none"
         />
+        </View>
+        <View style={styles.inputContainer}>
+        <Entypo name="lock" size={20} color="#464853" style={styles.icon}/> 
         <TextInput
           style={styles.input}
           value={password}
@@ -70,6 +84,9 @@ const Registerpage = ({ navigation }) => {
           placeholder="Password"
           secureTextEntry
         />
+        </View>
+        <View style={styles.inputContainer}>
+        <Entypo name="lock" size={20} color="#464853" style={styles.icon}/> 
         <TextInput
           style={styles.input}
           value={confirmPassword}
@@ -77,6 +94,9 @@ const Registerpage = ({ navigation }) => {
           placeholder="Confirm Password"
           secureTextEntry
         />
+        </View>
+        <View style={styles.inputContainer}>
+        <FontAwesome name="phone" size={20} color="#464853" style={styles.icon}/>
         <TextInput
           style={styles.input}
           value={mobileNumber}
@@ -84,6 +104,7 @@ const Registerpage = ({ navigation }) => {
           placeholder="Mobile Number"
           keyboardType="phone-pad"
         />
+        </View>
         <CustomButton label={"Register"} onPress={registerUser} />
         <View style={styles.loginContainer}>
           <Text>Already have an account?</Text>
@@ -107,27 +128,41 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignItems: 'center',
-    marginTop: 8,
+    marginTop: 0,
+  },
+  image:{
+    width: 370, 
+    height: 350, 
+    resizeMode: 'contain',
   },
   login: {
     fontFamily: 'arial',
     fontSize: 30,
     fontWeight: '800',
     color: '#181816',
-    marginBottom: 30,
+    marginBottom: 20,
+    // textAlign: 'center',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    paddingBottom: 8,
+    marginBottom: 20,
+  },
+  icon: {
+    marginRight: 10,
     textAlign: 'center',
   },
   input: {
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
-    marginBottom: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
+    flexDirection: 'row',
+    borderBottomColor: '#181816',
+    alignItems:'center',
   },
   loginContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 20,
+    marginBottom: 25,
   },
   loginText: {
     color: '#AD40AF',
