@@ -5,7 +5,7 @@ const { width } = Dimensions.get('window');
 const imageWidth = width * 0.95; 
 const imageHeight = imageWidth;
 
-
+import { withNavigation } from '@react-navigation/compat';
 import Onboarding from 'react-native-onboarding-swiper';
 
 const Dots = ({selected}) => {
@@ -93,7 +93,7 @@ const Onboardingpage = ({navigation}) => {
     );
 };
 
-export default Onboardingpage;
+export default withNavigation(Onboardingpage);
 
 const styles = StyleSheet.create({
   container: {

@@ -53,6 +53,7 @@ const Loginpage = ({ navigation }) => {
           keyboardType="email-address"
           autoCapitalize="none"
         />
+        
         <TextInput
           style={styles.input}
           value={password}
