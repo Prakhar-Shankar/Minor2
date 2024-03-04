@@ -1,25 +1,40 @@
 import React, { useState } from 'react';
-import { StyleSheet, SafeAreaView, View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { StyleSheet, SafeAreaView, View, Text, Image, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../utils/firebaseConfig';
-
-import { Entypo, MaterialIcons } from '@expo/vector-icons';
-import profile from "../images/profile.png";
-import { Ionicons } from '@expo/vector-icons';
 import CustomButton from '../components/CustomButton';
+import profile from "../images/profile.png";
 
 const Loginpage = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const createUser = async () => {
+  const loginUser = async () => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      // Sign in user with email and password
+
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      console.log('User account created & signed in:', user);
-      // You can navigate to another screen here if needed
+
+      console.log('User logged in:', user);
+
+      // Navigate user to Landing page after successful login
+
+      navigation.navigate('Landing');
     } catch (error) {
-      console.error('Error creating user:', error);
+      console.error('Error logging in:', error);
+
+      // Check if the error is due to user not found
+
+      if (error.code === 'auth/user-not-found') {
+        // Display a message prompting the user to register first
+
+        Alert.alert('User Not Found', 'Please register first before logging in.');
+      } else {
+        // Display generic error message for other errors
+        
+        Alert.alert('User Not Found', 'Please register first before logging in.');
+      }
     }
   };
 
@@ -30,8 +45,6 @@ const Loginpage = ({ navigation }) => {
           <Image source={profile} height={300} width={300} />
         </View>
         <Text style={styles.login}>Login</Text>
-        <View style={styles.inputContainer}>
-          <Ionicons name="person" size={20} color="#666" style={styles.icon} />
         <TextInput
           style={styles.input}
           value={email}
@@ -40,9 +53,6 @@ const Loginpage = ({ navigation }) => {
           keyboardType="email-address"
           autoCapitalize="none"
         />
-      </View>
-      <View style={styles.inputContainer}>
-        <MaterialIcons name="email" size={20} color="#666" style={styles.icon} />
         <TextInput
           style={styles.input}
           value={password}
@@ -50,12 +60,7 @@ const Loginpage = ({ navigation }) => {
           placeholder="Password"
           secureTextEntry
         />
-      </View>
-
-        
-        <CustomButton label={"Login"} onPress={createUser} />
-        <Text style={styles.orText}>Or, login with ...</Text>
-        {/* Add login with social media buttons */}
+        <CustomButton label={"Login"} onPress={loginUser} />
         <View style={styles.registerContainer}>
           <Text>New to the app?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>
@@ -86,43 +91,24 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#181816',
     marginBottom: 30,
-    // textAlign: 'center',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    // borderBottomColor: '#ddd',
-    paddingBottom: 8,
-    marginBottom: 25,
-  },
-  icon: {
-    marginRight: 10,
+    textAlign: 'center',
   },
   input: {
-    flexDirection: 'row',
-    borderBottomColor: '#181816',
-    // borderBottomWidth: 1,
-    // paddingBottom: 8,
-    // marginBottom: 25,
-    alignItems:'center',
-  },
-  orText: {
-    textAlign: 'center',
-    fontSize:15,
-    color: '#181816',
-    marginBottom: 30,
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
   },
   registerContainer: {
     flexDirection: 'row',
-    fontSize:15,
     justifyContent: 'center',
-    marginBottom: 30,
+    marginTop: 20,
   },
   registerText: {
     color: '#AD40AF',
-    fontSize:15,
     fontWeight: '700',
+    marginLeft: 5,
   },
 });
 
