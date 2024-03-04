@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
-const carImage = require("../images/car1.jpeg");
+const carImage = require("../images/cab5.png");
 
 const HomeScreen = () => {
   return (
