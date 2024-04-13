@@ -22,7 +22,7 @@ const Loginpage = ({ navigation }) => {
 
       // Navigate user to Landing page after successful login
 
-      navigation.navigate('Find');
+      navigation.navigate('Landing');
     } catch (error) {
       console.error('Error logging in:', error);
 

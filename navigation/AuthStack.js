@@ -7,6 +7,7 @@ import Onboardingpage from '../components/Onboardingpage';
 import FindRide from '../components/FindRide';
 import SplashScreen from '../components/Splashscreen';
 import OfferRide from '../components/OfferRide';
+import LandingPage from '../components/LandingPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ const AuthStack = () => {
       <Stack.Screen name="Onboarding" component={Onboardingpage} />
       <Stack.Screen name="Login" component={Loginpage} />
       <Stack.Screen name="Register" component={Registerpage} />
+      <Stack.Screen name="Landing" component={LandingPage} />
       <Stack.Screen name="Find" component={FindRide} />
       <Stack.Screen name="Offer" component={OfferRide} />
     </Stack.Navigator>
