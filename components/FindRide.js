@@ -74,7 +74,7 @@ const HomeScreen = ({navigation}) => {
 
       if (Platform.OS === "android") {
         toggleTimepicker();
-        // setTime(formatTime(currentTime));
+        setTime(formatTime(currentTime));
       }
     } else {
       toggleTimepicker();
@@ -86,9 +86,6 @@ const HomeScreen = ({navigation}) => {
       <View style={styles.container}>
         <View style={styles.headerSection}>{/* Header content */}</View>
 
-        {/* <View style={styles.titleSection}>
-          <Text style={styles.title}>Book your Cab</Text>
-        </View> */}
         <View style={styles.innerContainer}>
           <View style={styles.button_c}>
             <TouchableOpacity onPress={() => navigation.navigate('Find')} style={[styles.buttons, styles.button_1]}>
@@ -208,20 +205,6 @@ const HomeScreen = ({navigation}) => {
               />
             </View>
           </View>
-          {/* 
-        <View style={styles.carImageContainer}>
-          <Image
-            source={carImage}
-            resizeMode="cover"
-            style={styles.carImage}
-          />
-        </View> */}
-
-          {/* <TextInput
-          style={[styles.input, styles.priceInput]}
-          placeholder="Enter your price"
-          placeholderTextColor="#ccc"
-        /> */}
         </View>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Find Ride</Text>
@@ -318,18 +301,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: "#000",
   },
-  carImageContainer: {
-    marginTop: 20,
-    alignItems: "center",
-  },
-  carImage: {
-    width: "100%",
-    height: 200,
-  },
-  priceInput: {
-    marginTop: 20,
-  },
-
   button: {
     backgroundColor: "#007bff",
     borderBottomEndRadius: 8,
