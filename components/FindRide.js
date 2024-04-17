@@ -206,7 +206,7 @@ const HomeScreen = ({navigation}) => {
             </View>
           </View>
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity onPress={() => navigation.navigate('FindR')} style={styles.button}>
           <Text style={styles.buttonText}>Find Ride</Text>
         </TouchableOpacity>
       </View>

@@ -30,6 +30,7 @@ const LandingPage = ({ navigation }) => {
         </View>
 
         <View style={[styles.containers,styles.container]}>
+        
           <ImageBackground
             source={require("../images/cab1.png")}
             style={styles.backgroundImage}

@@ -8,6 +8,7 @@ import FindRide from '../components/FindRide';
 import SplashScreen from '../components/Splashscreen';
 import OfferRide from '../components/OfferRide';
 import LandingPage from '../components/LandingPage';
+import FindRequest from '../components/FindRequest';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ const AuthStack = () => {
       <Stack.Screen name="Landing" component={LandingPage} />
       <Stack.Screen name="Find" component={FindRide} />
       <Stack.Screen name="Offer" component={OfferRide} />
+      <Stack.Screen name="FindR" component={FindRequest} />
     </Stack.Navigator>
   );
 };
