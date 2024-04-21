@@ -81,6 +81,23 @@ const OfferRide = ({ navigation }) => {
     }
   };
 
+  const handleSubmit = async () => {
+    try {
+      const rideData = {
+        dropLocation,
+        pickupLocation,
+        date,
+        time,
+        seat,
+      };
+      // Add ride data to Firestore
+      const docRef = await addDoc(collection(firestore, "rides"), rideData);
+      console.log("Ride added with ID: ", docRef.id);
+    } catch (error) {
+      console.error("Error adding ride: ", error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -119,7 +136,7 @@ const OfferRide = ({ navigation }) => {
                 placeholder="Pickup Location"
                 placeholderTextColor="black"
                 value={pickupLocation}
-                onChangeText={setPickupLocation} // Add onChangeText handler
+                onChangeText={setPickupLocation} 
               />
             </View>
             <View style={[styles.inputContainer, styles.input]}>
@@ -129,7 +146,7 @@ const OfferRide = ({ navigation }) => {
                 placeholder="Drop Location"
                 placeholderTextColor="black"
                 value={dropLocation}
-                onChangeText={setDropLocation} // Add onChangeText handler
+                onChangeText={setDropLocation} 
               />
             </View>
 
@@ -209,26 +226,15 @@ const OfferRide = ({ navigation }) => {
                 placeholder="No.of seat"
                 placeholderTextColor="#ccc"
                 value={seat}
+                onChangeText={setSeat}
               />
             </View>
           </View>
-          {/* 
-        <View style={styles.carImageContainer}>
-          <Image
-            source={carImage}
-            resizeMode="cover"
-            style={styles.carImage}
-          />
-        </View> */}
 
-          {/* <TextInput
-          style={[styles.input, styles.priceInput]}
-          placeholder="Enter your price"
-          placeholderTextColor="#ccc"
-        /> */}
+          
         </View>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Offer Ride</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("FindR")} style={styles.button}>
+          <Text style={styles.buttonText} onPress={handleSubmit}>Offer Ride</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
