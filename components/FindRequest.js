@@ -1,262 +1,262 @@
-import React,{useState} from "react";
-import { FlatList, StyleSheet, SafeAreaView, Text, TouchableOpacity,TextInput, View,Modal } from "react-native";
-import { FontAwesome6 } from '@expo/vector-icons';
+import React, { useState, useEffect } from "react";
+import {
+  FlatList,
+  StyleSheet,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  View,
+  Modal,
+} from "react-native";
+import { FontAwesome6 } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-
-const data = [
-    {
-        id: '1',
-        name: 'Saumya Bansal',
-        date: '12/02/2024',
-        from:"Jaypee 62",
-        to:"Jaypee 128",
-        time:'4:00',
-        rating:'4.5',
-    },
-    {
-        id: '2',
-        name: 'Arshika Porwal',
-        date: '12/03/2024',
-        from:"Jaypee 128",
-        to:"Sector 18",
-        time:'5:00',
-        rating:"4.7",
-    },
-];
-
-const renderItem = ({ item }) => (
-    <View style={styles.req_container}>
-        <View style={styles.first_c}>
-            <View style={styles.first_inner}>
-                <FontAwesome6 style={styles.image} name="circle-user" size={30} color="black" />
-            </View>
-            <View style={styles.second_inner}>
-                <View style={styles.second_inner_c}>
-                    <Text style={styles.text}>{item.name}</Text> 
-                </View>
-                <View style={styles.second_inner_c}>
-                    <Text>From: {item.from}</Text> 
-                </View>
-                <View style={styles.second_inner_c}>
-                    <Text>To: {item.to}</Text> 
-                </View>
-            </View>
-            <View style={styles.third_inner}>
-                <View style={styles.second_inner_c}>
-                    <Text style={styles.text_d}>{item.date}</Text> 
-                </View>
-                <View style={styles.second_inner_c}>
-                    <Text>Time: {item.time}</Text> 
-                </View>
-                <View style={styles.second_inner_c}>
-                    <Text>Rating: {item.rating}</Text> 
-                </View>
-            </View>
-        </View>
-        <View style={styles.second_c}>
-            <TouchableOpacity style={[styles.buttons, styles.button_1]}>
-                <Text style={[styles.buttonText,styles.buttonText_1]}>Decline</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Offer')} style={[styles.buttons, styles.button_2]}>
-                <Text style={[styles.buttonText,styles.buttonText_2]}>Chat</Text>
-            </TouchableOpacity>
-        </View>
-    </View>
-);
+import { collection, getDocs } from "firebase/firestore";
+import { firestore } from "../utils/firebaseConfig";
 
 const FindRequest = () => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [sortBy, setSortBy] = useState(null);
-    const [isSortModalVisible, setIsSortModalVisible] = useState(false);
+  const [rideData, setRideData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState(null);
+  const [isSortModalVisible, setIsSortModalVisible] = useState(false);
 
-    const filteredData = data.filter(item => {
-        const lowerCaseSearchQuery = searchQuery.toLowerCase();
-        return (
-            item.name.toLowerCase().includes(lowerCaseSearchQuery) ||
-            item.from.toLowerCase().includes(lowerCaseSearchQuery) ||
-            item.to.toLowerCase().includes(lowerCaseSearchQuery)
-        );
-    });
-
-    const sortData = (sortBy) => {
-        const sortedData = [...filteredData];
-        switch (sortBy) {
-            case 'time':
-                sortedData.sort((a, b) => a.time.localeCompare(b.time));
-                break;
-            case 'rating':
-                sortedData.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
-                break;
-            case 'date':
-                sortedData.sort((a, b) => new Date(b.date) - new Date(a.date));
-                break;
-            default:
-                break;
-        }
-        return sortedData;
+  useEffect(() => {
+    const fetchRideData = async () => {
+      try {
+        const rideCollection = collection(firestore, "rides");
+        const snapshot = await getDocs(rideCollection);
+        const rides = snapshot.docs.map((doc) => {
+          try {
+            const data = doc.data();
+            const date = data.date ? new Date(data.date) : null; // Check if date field exists
+            const time = data.time ? new Date(data.time) : null; // Check if time field exists
+            return {
+              id: doc.id,
+              ...data,
+              date,
+              time,
+            };
+          } catch (error) {
+            console.error("Error parsing document data:", error);
+            console.log("Document:", doc.id, doc.data());
+            return null;
+          }
+        });
+        // Filter out any null entries
+        const validRides = rides.filter((ride) => ride !== null);
+        setRideData(validRides);
+      } catch (error) {
+        console.error("Error fetching ride data:", error);
+      }
     };
 
+    fetchRideData();
+  }, []);
+
+  const renderItem = ({ item }) => {
+    let date = "Invalid date";
+    if (typeof item.date === "string") {
+      const parsedDate = new Date(item.date);
+      if (!isNaN(parsedDate.getTime())) {
+        date = parsedDate.toLocaleDateString();
+      }
+    } else if (item.date instanceof Date) {
+      date = item.date.toLocaleDateString();
+    }
+
+    let time = "Invalid time";
+    if (typeof item.time === "string") {
+      const [hours, minutes] = item.time.split(":");
+      const parsedTime = new Date();
+      parsedTime.setHours(parseInt(hours, 10));
+      parsedTime.setMinutes(parseInt(minutes, 10));
+      if (!isNaN(parsedTime.getTime())) {
+        time = parsedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+    } else if (item.time instanceof Date) {
+      time = item.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
     return (
-        <SafeAreaView style={styles.safearea}>
-            <View style={styles.header}>
-                <View style={styles.searchContainer}>
-                    <TextInput
-                        style={styles.searchInput}
-                        placeholder="Search..."
-                        onChangeText={(text) => setSearchQuery(text)}
-                        value={searchQuery}
-                    />
-                </View>
-                <TouchableOpacity onPress={() => setIsSortModalVisible(true)}>
-                    <MaterialIcons name="sort" size={24} color="black" />
-                </TouchableOpacity>
-            </View>
-            <FlatList
-                data={sortData(sortBy)}
-                renderItem={renderItem}
-                keyExtractor={item => item.id}
+      <View style={styles.req_container}>
+        <View style={styles.first_c}>
+          <View style={styles.first_inner}>
+            <FontAwesome6
+              style={styles.image}
+              name="circle-user"
+              size={30}
+              color="black"
             />
-            <Modal
-                visible={isSortModalVisible}
-                animationType="slide"
-                transparent={true}
-                onRequestClose={() => setIsSortModalVisible(false)}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <TouchableOpacity onPress={() => { setSortBy('time'); setIsSortModalVisible(false); }}>
-                            <Text style={styles.sortOption}>Sort by Time</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { setSortBy('rating'); setIsSortModalVisible(false); }}>
-                            <Text style={styles.sortOption}>Sort by Rating</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { setSortBy('date'); setIsSortModalVisible(false); }}>
-                            <Text style={styles.sortOption}>Sort by Date</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
-        </SafeAreaView>
+          </View>
+          <View style={styles.second_inner}>
+            <View style={styles.second_inner_c}>
+              <Text style={styles.text}>From: {item.pickupLocation}</Text>
+            </View>
+            <View style={styles.second_inner_c}>
+              <Text>To: {item.dropLocation}</Text>
+            </View>
+            <View style={styles.second_inner_c}>
+              <Text>Date: {date}</Text>
+            </View>
+            <View style={styles.second_inner_c}>
+              <Text>Time: {time}</Text>
+            </View>
+          </View>
+        </View>
+      </View>
     );
+  };
+
+  const sortData = (sortBy) => {
+    const filteredData = rideData.filter((item) => {
+      const lowerCaseSearchQuery = searchQuery.toLowerCase();
+      return (
+        item.pickupLocation.toLowerCase().includes(lowerCaseSearchQuery) ||
+        item.dropLocation.toLowerCase().includes(lowerCaseSearchQuery)
+      );
+    });
+
+    const sortedData = [...filteredData];
+    switch (sortBy) {
+      case "time":
+        sortedData.sort((a, b) => a.time - b.time);
+        break;
+      case "date":
+        sortedData.sort((a, b) => a.date - b.date);
+        break;
+      default:
+        break;
+    }
+    return sortedData;
+  };
+
+  return (
+    <SafeAreaView style={styles.safearea}>
+      <View style={styles.header}>
+        <View style={styles.searchContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search..."
+            onChangeText={(text) => setSearchQuery(text)}
+            value={searchQuery}
+          />
+        </View>
+        <TouchableOpacity onPress={() => setIsSortModalVisible(true)}>
+          <MaterialIcons name="sort" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+      <FlatList
+        data={sortData(sortBy)}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+      />
+      <Modal
+        visible={isSortModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setIsSortModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity
+              onPress={() => {
+                setSortBy("time");
+                setIsSortModalVisible(false);
+              }}
+            >
+              <Text style={styles.sortOption}>Sort by Time</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setSortBy("date");
+                setIsSortModalVisible(false);
+              }}
+            >
+              <Text style={styles.sortOption}>Sort by Date</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </SafeAreaView>
+  );
 };
-const styles=StyleSheet.create({
-    safearea:{
-        flex: 1,
-        backgroundColor: "#e7e7e7",
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 10,
-        marginBottom: 10,
-    },
-    searchContainer: {
-        flex: 1,
-        marginRight: 10,
-        marginTop:15,
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: 'gray',
-    },
-    searchInput: {
-        height: 40,
-        paddingHorizontal: 10,
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
-        backgroundColor: 'white',
-        padding: 20,
-        borderRadius: 10,
-        elevation: 5,
-    },
-    sortOption: {
-        fontSize: 18,
-        paddingVertical: 10,
-    },
-    req_container:{
-        paddingHorizontal:10,
-        paddingVertical:15,
-        marginVertical:10,
-        marginHorizontal:10,
-        backgroundColor:'white',
-        borderColor:"#007bff",
-        borderWidth:5,
-        borderRadius:5,
-    },
-    first_c:{
-        flexDirection:"row",
-        marginHorizontal:5,
-        marginVertical:5,
-        paddingVertical:0,
-    },
-    first_inner:{
-        flex:1,
-        paddingHorizontal:0,
-        paddingVertical:15,
-    },
-    second_inner:{
-        flex:3,
-        flexDirection:'column',
-        marginVertical:0,
-    },
-    second_inner_c:{
-        flex:1,
-    },
-    third_inner:{
-        flex:1.5,
-        flexDirection:'column',
-        marginVertical:0,
-    },
-    second_c:{
-        flexDirection:"row",
-        marginHorizontal:10,
-        paddingHorizontal: 20,
-    },
-    image:{
-        marginBottom:10,
-        height:40,
-    },
-    text:{
-        fontSize:18,
-        fontWeight:"500"
-    },
-    text_d:{
-        fontSize:15,
-        color:'green',
-        fontWeight:"600"
-    },
-    buttons: {
-        flex: 1,
-        borderRadius: 8,
-        alignItems: "center",
-        marginHorizontal:10,
-        paddingVertical: 8,
-    },
-    button_1: {
-        backgroundColor: "white",
-        borderColor:"#007bff",
-        borderWidth:2,
-        textcolor:"red",
-    },
-    button_2: {
-        backgroundColor: "#007bff",
-    },
-    buttonText: {
-        fontSize: 16,
-        fontWeight: "600",
-    },
-    buttonText_1: {
-        color: "red",
-    },
-    buttonText_2: {
-        color: "white",
-    },
+
+const styles = StyleSheet.create({
+  safearea: {
+    flex: 1,
+    backgroundColor: "#e7e7e7",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  searchContainer: {
+    flex: 1,
+    marginRight: 10,
+    marginTop: 15,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "gray",
+  },
+  searchInput: {
+    height: 40,
+    paddingHorizontal: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+  },
+  sortOption: {
+    fontSize: 18,
+    paddingVertical: 10,
+  },
+  req_container: {
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    marginVertical: 10,
+    marginHorizontal: 10,
+    backgroundColor: "white",
+    borderColor: "#007bff",
+    borderWidth: 5,
+  },
+  first_c: {
+    flexDirection: "row",
+    marginHorizontal: 5,
+    marginVertical: 5,
+    paddingVertical: 0,
+  },
+  first_inner: {
+    flex: 1,
+    paddingHorizontal: 0,
+    paddingVertical: 15,
+  },
+  second_inner: {
+    flex: 3,
+    flexDirection: "column",
+    marginVertical: 0,
+  },
+  second_inner_c: {
+    flex: 1,
+  },
+  image: {
+    marginBottom: 10,
+    height: 40,
+  },
+  text: {
+    fontSize: 18,
+    fontWeight: "500",
+  },
 });
 
 export default FindRequest;
