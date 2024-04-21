@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  FlatList,
-  StyleSheet,
-  SafeAreaView,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  View,
-  Modal,
-} from "react-native";
+import { FlatList, StyleSheet, SafeAreaView, Text, TouchableOpacity, TextInput, View, Modal } from "react-native";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { collection, getDocs } from "firebase/firestore";
@@ -28,13 +19,11 @@ const FindRequest = () => {
         const rides = snapshot.docs.map((doc) => {
           try {
             const data = doc.data();
-            const date = data.date ? new Date(data.date) : null; // Check if date field exists
-            const time = data.time ? new Date(data.time) : null; // Check if time field exists
             return {
               id: doc.id,
               ...data,
-              date,
-              time,
+              date: data.date ? new Date(data.date.seconds * 1000) : null,
+              time: data.time ? new Date(data.time.seconds * 1000) : null,
             };
           } catch (error) {
             console.error("Error parsing document data:", error);
@@ -54,39 +43,21 @@ const FindRequest = () => {
   }, []);
 
   const renderItem = ({ item }) => {
-    let date = "Invalid date";
-    if (typeof item.date === "string") {
-      const parsedDate = new Date(item.date);
-      if (!isNaN(parsedDate.getTime())) {
-        date = parsedDate.toLocaleDateString();
-      }
-    } else if (item.date instanceof Date) {
-      date = item.date.toLocaleDateString();
-    }
+    const formatDate = (date) => {
+      if (!date) return "Invalid date";
+      return date.toLocaleDateString();
+    };
 
-    let time = "Invalid time";
-    if (typeof item.time === "string") {
-      const [hours, minutes] = item.time.split(":");
-      const parsedTime = new Date();
-      parsedTime.setHours(parseInt(hours, 10));
-      parsedTime.setMinutes(parseInt(minutes, 10));
-      if (!isNaN(parsedTime.getTime())) {
-        time = parsedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      }
-    } else if (item.time instanceof Date) {
-      time = item.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
+    const formatTime = (time) => {
+      if (!time) return "Invalid time";
+      return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    };
 
     return (
       <View style={styles.req_container}>
         <View style={styles.first_c}>
           <View style={styles.first_inner}>
-            <FontAwesome6
-              style={styles.image}
-              name="circle-user"
-              size={30}
-              color="black"
-            />
+            <FontAwesome6 style={styles.image} name="circle-user" size={30} color="black" />
           </View>
           <View style={styles.second_inner}>
             <View style={styles.second_inner_c}>
@@ -96,10 +67,10 @@ const FindRequest = () => {
               <Text>To: {item.dropLocation}</Text>
             </View>
             <View style={styles.second_inner_c}>
-              <Text>Date: {date}</Text>
+              <Text>Date: {formatDate(item.date)}</Text>
             </View>
             <View style={styles.second_inner_c}>
-              <Text>Time: {time}</Text>
+              <Text>Time: {formatTime(item.time)}</Text>
             </View>
           </View>
         </View>

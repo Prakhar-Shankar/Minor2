@@ -1,32 +1,25 @@
 import React, { useState } from "react";
 import {
-  Image,
   SafeAreaView,
   StyleSheet,
-  Platform,
   Text,
   TextInput,
   TouchableOpacity,
   View,
   Pressable,
 } from "react-native";
-
 import DateTimePicker from "@react-native-community/datetimepicker";
-
-const carImage = require("../images/cab5.png");
 import { Entypo } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { firestore } from "../utils/firebaseConfig";
 
 const OfferRide = ({ navigation }) => {
   const [dropLocation, setDropLocation] = useState("");
   const [pickupLocation, setPickupLocation] = useState("");
   const [seat, setSeat] = useState("");
-
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setDatePicker] = useState(false);
-
   const [time, setTime] = useState(new Date());
   const [showTimePicker, setTimePicker] = useState(false);
 
@@ -34,68 +27,38 @@ const OfferRide = ({ navigation }) => {
     setDatePicker(!showDatePicker);
   };
 
-  const onChangeDate = ({ type }, selectedDate) => {
-    if (type == "set") {
-      const currentDate = selectedDate || date;
-      setDate(currentDate);
-
-      if (Platform.OS === "android") {
-        toggleDatepicker();
-        setDate(formatDate(currentDate));
-      }
-    } else {
-      toggleDatepicker();
-    }
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setDate(currentDate);
+    toggleDatepicker();
   };
 
-  const formatDate = (rawDate) => {
-    let date = new Date(rawDate);
-
-    let year = date.getFullYear();
-    let month = date.getMonth();
-    let day = date.getDate();
-
-    return `${day}/${month}/${year}`;
-  };
-
-  const formatTime = (rawTime) => {
-    let date = new Date(rawTime);
-
-    let hr = date.getHours();
-    let min = date.getMinutes();
-    return `${hr}:${min}`;
-  };
   const toggleTimepicker = () => {
     setTimePicker(!showTimePicker);
   };
 
-  const onChangeTime = ({ type }, selectedTime) => {
-    if (type == "set") {
-      const currentTime = selectedTime || time;
-      setTime(currentTime);
-
-      if (Platform.OS === "android") {
-        toggleTimepicker();
-        setTime(formatTime(currentTime));
-      }
-    } else {
-      toggleTimepicker();
-    }
+  const onChangeTime = (event, selectedTime) => {
+    const currentTime = selectedTime || time;
+    setTime(currentTime);
+    toggleTimepicker();
   };
 
   const handleSubmit = async () => {
     try {
+      const dateTimestamp = Timestamp.fromDate(date);
+      const timeTimestamp = Timestamp.fromDate(time);
+
       const rideData = {
         dropLocation,
         pickupLocation,
-        date,
-        time,
+        date: dateTimestamp,
+        time: timeTimestamp,
         seat,
       };
-      // Add ride data to Firestore
+
       const docRef = await addDoc(collection(firestore, "rides"), rideData);
       console.log("Ride added with ID: ", docRef.id);
-      // Navigate to FindR page
+      
       navigation.navigate("FindR");
     } catch (error) {
       console.error("Error adding ride: ", error);
@@ -106,21 +69,6 @@ const OfferRide = ({ navigation }) => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.innerContainer}>
-          <View style={styles.button_c}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Find")}
-              style={[styles.buttons, styles.button_1]}
-            >
-              <Text style={styles.buttonText}>Find Ride</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Offer")}
-              style={[styles.buttons, styles.button_2]}
-            >
-              <Text style={styles.buttonText}>Offer Ride</Text>
-            </TouchableOpacity>
-          </View>
-
           <View style={styles.searchSection}>
             <View style={[styles.inputContainer, styles.input]}>
               <Entypo
@@ -133,7 +81,7 @@ const OfferRide = ({ navigation }) => {
                 placeholder="Pickup Location"
                 placeholderTextColor="black"
                 value={pickupLocation}
-                onChangeText={setPickupLocation} 
+                onChangeText={setPickupLocation}
               />
             </View>
             <View style={[styles.inputContainer, styles.input]}>
@@ -142,7 +90,7 @@ const OfferRide = ({ navigation }) => {
                 placeholder="Drop Location"
                 placeholderTextColor="black"
                 value={dropLocation}
-                onChangeText={setDropLocation} 
+                onChangeText={setDropLocation}
               />
             </View>
 
@@ -173,8 +121,7 @@ const OfferRide = ({ navigation }) => {
                       style={[styles.date]}
                       placeholder="Date(Choose)"
                       placeholderTextColor="#ccc"
-                      value={date}
-                      onChangeText={setDate}
+                      value={date.toDateString()}
                       editable={false}
                     />
                   </Pressable>
@@ -202,8 +149,7 @@ const OfferRide = ({ navigation }) => {
                       style={[styles.seat]}
                       placeholder="Time"
                       placeholderTextColor="#ccc"
-                      value={time}
-                      onChangeText={setTime}
+                      value={time.toLocaleTimeString()}
                       editable={false}
                     />
                   </Pressable>
@@ -225,11 +171,9 @@ const OfferRide = ({ navigation }) => {
               />
             </View>
           </View>
-
-          
         </View>
         <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-          <Text style={styles.buttonText}>Find Ride</Text>
+          <Text style={styles.buttonText}>Offer Ride</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -254,10 +198,6 @@ const styles = StyleSheet.create({
     marginTop: 260,
     borderBottomEndRadius: 0,
     borderBottomStartRadius: 0,
-  },
-  button_c: {
-    flexDirection: "row",
-    paddingHorizontal: 20,
   },
   inputContainer: {
     flexDirection: "row",
