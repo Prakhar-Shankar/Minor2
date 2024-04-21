@@ -17,10 +17,10 @@ const carImage = require("../images/cab5.png");
 import { Entypo } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const OfferRide = ({navigation}) => {
-  const [dropLocation, setDropLocation] = useState('');
-  const [pickupLocation, setPickupLocation] = useState('');
-  const [seat, setSeat] = useState('');
+const OfferRide = ({ navigation }) => {
+  const [dropLocation, setDropLocation] = useState("");
+  const [pickupLocation, setPickupLocation] = useState("");
+  const [seat, setSeat] = useState("");
 
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setDatePicker] = useState(false);
@@ -34,7 +34,7 @@ const OfferRide = ({navigation}) => {
 
   const onChangeDate = ({ type }, selectedDate) => {
     if (type == "set") {
-      const currentDate = selectedDate || date; ;
+      const currentDate = selectedDate || date;
       setDate(currentDate);
 
       if (Platform.OS === "android") {
@@ -84,17 +84,24 @@ const OfferRide = ({navigation}) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <View style={styles.headerSection}>{/* Header content */}</View>
+        {/* <View style={styles.headerSection}>Header content */}
+        {/* </View> */}
 
         {/* <View style={styles.titleSection}>
           <Text style={styles.title}>Book your Cab</Text>
         </View> */}
         <View style={styles.innerContainer}>
           <View style={styles.button_c}>
-            <TouchableOpacity onPress={() => navigation.navigate('Find')} style={[styles.buttons, styles.button_1]}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Find")}
+              style={[styles.buttons, styles.button_1]}
+            >
               <Text style={styles.buttonText}>Find Ride</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Offer')} style={[styles.buttons, styles.button_2]}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Offer")}
+              style={[styles.buttons, styles.button_2]}
+            >
               <Text style={styles.buttonText}>Offer Ride</Text>
             </TouchableOpacity>
           </View>
@@ -112,6 +119,7 @@ const OfferRide = ({navigation}) => {
                 placeholder="Pickup Location"
                 placeholderTextColor="black"
                 value={pickupLocation}
+                onChangeText={setPickupLocation} // Add onChangeText handler
               />
             </View>
             <View style={[styles.inputContainer, styles.input]}>
@@ -121,6 +129,7 @@ const OfferRide = ({navigation}) => {
                 placeholder="Drop Location"
                 placeholderTextColor="black"
                 value={dropLocation}
+                onChangeText={setDropLocation} // Add onChangeText handler
               />
             </View>
 
@@ -162,12 +171,7 @@ const OfferRide = ({navigation}) => {
                 style={[styles.inputContainer, styles.input]}
                 marginLeft={10}
               >
-                <Entypo
-                  name="clock"
-                  size={15}
-                  color="black"
-                  marginRight={10}
-                />
+                <Entypo name="clock" size={15} color="black" marginRight={10} />
                 {showTimePicker && (
                   <DateTimePicker
                     mode="time"
@@ -194,8 +198,8 @@ const OfferRide = ({navigation}) => {
               </View>
             </View>
             <View style={[styles.inputContainer, styles.input]}>
-            <MaterialIcons
-                  name="date-range"
+              <MaterialIcons
+                name="date-range"
                 size={15}
                 color="black"
                 marginRight={10}
@@ -246,7 +250,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 10,
     borderRadius: 8,
-    marginTop: 200,
+    marginTop: 260,
     borderBottomEndRadius: 0,
     borderBottomStartRadius: 0,
   },
@@ -273,7 +277,7 @@ const styles = StyleSheet.create({
     // marginRight:20,
   },
   seat: {
-     marginRight:20,
+    marginRight: 20,
   },
   headerSection: {
     height: 70,
