@@ -16,6 +16,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 const carImage = require("../images/cab5.png");
 import { Entypo } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import { collection, addDoc } from "firebase/firestore";
+import { firestore } from "../utils/firebaseConfig";
 
 const OfferRide = ({ navigation }) => {
   const [dropLocation, setDropLocation] = useState("");
@@ -93,6 +95,8 @@ const OfferRide = ({ navigation }) => {
       // Add ride data to Firestore
       const docRef = await addDoc(collection(firestore, "rides"), rideData);
       console.log("Ride added with ID: ", docRef.id);
+      // Navigate to FindR page
+      navigation.navigate("FindR");
     } catch (error) {
       console.error("Error adding ride: ", error);
     }
@@ -101,12 +105,6 @@ const OfferRide = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        {/* <View style={styles.headerSection}>Header content */}
-        {/* </View> */}
-
-        {/* <View style={styles.titleSection}>
-          <Text style={styles.title}>Book your Cab</Text>
-        </View> */}
         <View style={styles.innerContainer}>
           <View style={styles.button_c}>
             <TouchableOpacity
@@ -132,7 +130,6 @@ const OfferRide = ({ navigation }) => {
                 marginRight={10}
               />
               <TextInput
-                // style={styles.input}
                 placeholder="Pickup Location"
                 placeholderTextColor="black"
                 value={pickupLocation}
@@ -142,7 +139,6 @@ const OfferRide = ({ navigation }) => {
             <View style={[styles.inputContainer, styles.input]}>
               <Entypo name="location" size={15} color="red" marginRight={10} />
               <TextInput
-                // style={styles.input}
                 placeholder="Drop Location"
                 placeholderTextColor="black"
                 value={dropLocation}
@@ -222,7 +218,6 @@ const OfferRide = ({ navigation }) => {
                 marginRight={10}
               />
               <TextInput
-                // style={styles.input}
                 placeholder="No.of seat"
                 placeholderTextColor="#ccc"
                 value={seat}
@@ -233,8 +228,8 @@ const OfferRide = ({ navigation }) => {
 
           
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate("FindR")} style={styles.button}>
-          <Text style={styles.buttonText} onPress={handleSubmit}>Offer Ride</Text>
+        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+          <Text style={styles.buttonText}>Offer Ride</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -261,48 +256,23 @@ const styles = StyleSheet.create({
     borderBottomStartRadius: 0,
   },
   button_c: {
-    // flex:1,
     flexDirection: "row",
     paddingHorizontal: 20,
-    // width:'100%',
   },
-
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    // borderBottomWidth: 1,
-    // paddingBottom: 8,
-    // marginBottom: 20,
   },
-
   other: {
     flexDirection: "row",
   },
-  date: {
-    // flex:1,
-    // marginRight:20,
-  },
+  date: {},
   seat: {
     marginRight: 20,
-  },
-  headerSection: {
-    height: 70,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  titleSection: {
-    marginTop: 15,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "600",
-    color: "#000",
   },
   buttons: {
     flex: 1,
     backgroundColor: "#007bff",
-    // borderRadius: 8,
     alignItems: "center",
     paddingVertical: 15,
   },
@@ -327,18 +297,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: "#000",
   },
-  carImageContainer: {
-    marginTop: 20,
-    alignItems: "center",
-  },
-  carImage: {
-    width: "100%",
-    height: 200,
-  },
-  priceInput: {
-    marginTop: 20,
-  },
-
   button: {
     backgroundColor: "#007bff",
     borderBottomEndRadius: 8,
