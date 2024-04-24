@@ -137,7 +137,7 @@ export default function SplashScreen() {
                             { translateY: moveTitle.y },
                             { scale: scaleTitle }
                         ]
-                    }}>Goo Cab</Animated.Text>
+                    }}>Go Cab</Animated.Text>
 
                 </Animated.View>
 
