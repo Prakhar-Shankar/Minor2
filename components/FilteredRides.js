@@ -50,6 +50,10 @@ const FilteredRides = ({ route }) => {
     setIsSortModalVisible(false);
   };
 
+  const handleDeclinePress = (rideId) => {
+    setFilteredRides(filteredRides.filter((ride) => ride.id !== rideId));
+  };
+
   const renderRides = () => {
     let displayedRides = [...filteredRides];
 
@@ -71,6 +75,17 @@ const FilteredRides = ({ route }) => {
         <Text>Date: {ride.date}</Text>
         <Text>Time: {ride.time}</Text>
         <Text>Seats: {ride.seat}</Text>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.declineButton}
+            onPress={() => handleDeclinePress(ride.id)}
+          >
+            <Text style={styles.buttonText}>Decline</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.chatButton}>
+            <Text style={styles.buttonText}>Chat</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     ));
   };
@@ -140,6 +155,31 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+  declineButton: {
+    backgroundColor: "red",
+    flex: 1,
+    marginRight: 5,
+    alignItems: "center",
+    paddingVertical: 8,
+    borderRadius: 5,
+  },
+  chatButton: {
+    backgroundColor: "green",
+    flex: 1,
+    marginLeft: 5,
+    alignItems: "center",
+    paddingVertical: 8,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
   modalContainer: {
     flex: 1,
