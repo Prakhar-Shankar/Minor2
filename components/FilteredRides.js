@@ -4,7 +4,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { firestore } from "../utils/firebaseConfig";
 
-const FilteredRides = ({ route }) => {
+const FilteredRides = ({ route, navigation }) => {
   const { pickupLocation, dropLocation } = route.params;
   const [filteredRides, setFilteredRides] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -54,9 +54,14 @@ const FilteredRides = ({ route }) => {
     setFilteredRides(filteredRides.filter((ride) => ride.id !== rideId));
   };
 
+  const handleChatPress = (ride) => {
+    // Navigate to the ChatScreen with ride information
+    navigation.navigate('ChatScreen', { sender: ride.senderId });
+  };
+
   const renderRides = () => {
     let displayedRides = [...filteredRides];
-
+  
     if (searchQuery) {
       const lowerCaseSearchQuery = searchQuery.toLowerCase();
       displayedRides = displayedRides.filter(
@@ -65,15 +70,16 @@ const FilteredRides = ({ route }) => {
           ride.dropLocation.toLowerCase().includes(lowerCaseSearchQuery)
       );
     }
-
+  
     displayedRides = sortData(displayedRides);
-
+  
     return displayedRides.map((ride) => (
       <View key={ride.id} style={styles.rideItem}>
         <Text>Pickup Location: {ride.pickupLocation}</Text>
         <Text>Drop Location: {ride.dropLocation}</Text>
-        <Text>Date: {ride.date}</Text>
-        <Text>Time: {ride.time}</Text>
+        {/* Convert Firestore Timestamp to string */}
+        <Text>Date: {ride.date.toDate().toLocaleDateString()}</Text>
+        <Text>Time: {ride.time.toDate().toLocaleTimeString()}</Text>
         <Text>Seats: {ride.seat}</Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -82,13 +88,14 @@ const FilteredRides = ({ route }) => {
           >
             <Text style={styles.buttonText}>Decline</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.chatButton}>
+          <TouchableOpacity style={styles.chatButton} onPress={handleChatPress}>
             <Text style={styles.buttonText}>Chat</Text>
           </TouchableOpacity>
         </View>
       </View>
     ));
   };
+  
 
   return (
     <View style={styles.container}>

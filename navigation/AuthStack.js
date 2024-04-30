@@ -10,6 +10,8 @@ import OfferRide from '../components/OfferRide';
 import LandingPage from '../components/LandingPage';
 import FindRequest from '../components/FindRequest';
 import FilteredRides from '../components/FilteredRides';
+import ChatScreen from '../components/ChatScreen';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +27,7 @@ const AuthStack = () => {
       <Stack.Screen name="Offer" component={OfferRide} />
       <Stack.Screen name="FindR" component={FindRequest} />
       <Stack.Screen name="FilteredRides" component={FilteredRides} />
+      <Stack.Screen name="ChatScreen" component={ChatScreen} />
     </Stack.Navigator>
   );
 };
